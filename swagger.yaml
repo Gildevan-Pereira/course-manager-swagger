@@ -4,7 +4,7 @@ info:
   description: API de Gerenciamento de Cursos
   version: 1.0.0
 servers:
-- url: http://localhost:8282
+- url: http://localhost
 
 tags: 
   - name: Student-Controller
@@ -24,8 +24,8 @@ paths:
               $ref: "#/components/schemas/StudentRequestDto"
         required: true
       responses:
-        "200":
-          description: OK
+        "201":
+          description: CREATED
           content:
             '*/*':
               schema:
@@ -42,8 +42,8 @@ paths:
               $ref: "#/components/schemas/EnrollmentRequestDto"
         required: true
       responses:
-        "200":
-          description: OK
+        "201":
+          description: CREATED
           content:
             '*/*':
               schema:
@@ -60,8 +60,8 @@ paths:
               $ref: "#/components/schemas/CourseRequestDto"
         required: true
       responses:
-        "200":
-          description: OK
+        "201":
+          description: CREATED
           content:
             '*/*':
               schema:
@@ -88,6 +88,22 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/CourseResponseDto"
+        "404":
+          description: NOT_FOUND
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ErrorResponseDto2"
+        "500":
+          description: INTERNAL_SERVER_ERROR
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ErrorResponseDto3"
   /courses/{courseId}/students:
     get:
       tags:
@@ -110,6 +126,22 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/StudentResponseDto"
+        "404":
+          description: NOT_FOUND
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ErrorResponseDto1"
+        "500":
+          description: INTERNAL_SERVER_ERROR
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ErrorResponseDto3"
 components:
   schemas:
     StudentRequestDto:
@@ -198,3 +230,66 @@ components:
           type: string
           format: date-time
           example: '2024-11-14T14:15:41'
+    
+    ErrorResponseDto1:
+        type: object
+        properties:
+          errors:
+            type: array
+            description: Lista de errors
+            items: 
+              $ref: '#/components/schemas/ErrorDto1'
+              
+    ErrorDto1:
+      type: object
+      properties: 
+        code:
+          type: integer
+          description: Código de erro da mensagem
+          example: '0100'
+        message:
+          type: string
+          description: mensagem de erro
+          example: 'Courses not found for id: 1'
+
+    ErrorResponseDto2:
+        type: object
+        properties:
+          errors:
+            type: array
+            description: Lista de errors
+            items: 
+              $ref: '#/components/schemas/ErrorDto2'
+              
+    ErrorDto2:
+      type: object
+      properties: 
+        code:
+          type: integer
+          description: Código de erro da mensagem
+          example: '0101'
+        message:
+          type: string
+          description: mensagem de erro
+          example: 'Student not found for id: 1'
+    
+    ErrorResponseDto3:
+        type: object
+        properties:
+          errors:
+            type: array
+            description: Lista de errors
+            items: 
+              $ref: '#/components/schemas/ErrorDto3'
+              
+    ErrorDto3:
+      type: object
+      properties: 
+        code:
+          type: integer
+          description: Código de erro da mensagem
+          example: '0001'
+        message:
+          type: string
+          description: mensagem de erro
+          example: 'An error has occurred'
